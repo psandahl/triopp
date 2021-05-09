@@ -1,1 +1,5 @@
-add_library(trio-lib MathUtil.cpp)
+add_library(
+  trio-lib
+  MathUtil.cpp
+  MatrixUtil.cpp
+)

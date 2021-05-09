@@ -10,11 +10,13 @@ enable_testing()
 add_executable(
   trio-test
   MathUtilTest.cpp
+  MatrixUtilTest.cpp
 )
 
-target_link_libraries(
-  trio-test
+target_link_libraries(trio-test
+  PRIVATE
   trio-lib
+  ${OpenCV_LIBS}
   gtest_main
 )
 
