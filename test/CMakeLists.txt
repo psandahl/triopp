@@ -11,6 +11,7 @@ add_executable(
   trio-test
   MathUtilTest.cpp
   MatrixUtilTest.cpp
+  TestUtil.cpp
 )
 
 target_link_libraries(trio-test
