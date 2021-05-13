@@ -41,6 +41,19 @@ cv::Vec3d decomposeEuler(const cv::Mat& mat)
     , std::atan2(mat.at<double>(2, 1), mat.at<double>(2, 2))
   };
 }
+
+cv::Mat matrixRotateLookAt(const cv::Point3d& eye, const cv::Point3d& at,
+			   const cv::Vec3d& up)
+{
+  const cv::Vec3d front(cv::normalize(cv::Vec3d(at - eye)));
+  const cv::Vec3d side(cv::normalize(up.cross(front)));
+  const cv::Vec3d newUp(front.cross(side));
+
+  return (cv::Mat_<double>(3, 3) <<
+	  front[0], side[0], newUp[0],
+	  front[1], side[1], newUp[1],
+	  front[2], side[2], newUp[2]);
+}
   
 int matrixRank(const cv::Mat& m)
 {

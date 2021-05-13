@@ -7,6 +7,8 @@
 
 #include <gtest/gtest.h>
 
+#include <cmath>
+
 TEST(MatrixUtilTest, matrixRank)
 {
   EXPECT_EQ(0, trio::matrixRank(cv::Mat()));
@@ -68,4 +70,41 @@ TEST(MatrixUtilTest, matrixYPRAndDecompose)
   const cv::Vec3d r8(-78, -23, 179);
   const cv::Mat m8(trio::matrixRotateYPR(trio::degToRad(r8)));
   expectEqual(r8, trio::radToDeg(trio::decomposeEuler(m8)));
+}
+
+TEST(MatrixUtilTest, matrixLookAtAndDecompose)
+{
+  // Shall be no rotation.
+  const cv::Mat m0(trio::matrixRotateLookAt({0, 0, 0}, {1, 0, 0}, {0, 0, 1}));
+  expectEqual(cv::Vec3d(0, 0, 0), trio::radToDeg(trio::decomposeEuler(m0)));
+
+  // Shall be 45 degree yaw.
+  const cv::Mat m1(trio::matrixRotateLookAt({0, 0, 0}, {1, 1, 0}, {0, 0, 1}));
+  expectEqual(cv::Vec3d(45, 0, 0), trio::radToDeg(trio::decomposeEuler(m1)));
+
+  // Shall be -45 degree yaw.
+  const cv::Mat m2(trio::matrixRotateLookAt({0, 0, 0}, {1, -1, 0}, {0, 0, 1}));
+  expectEqual(cv::Vec3d(-45, 0, 0), trio::radToDeg(trio::decomposeEuler(m2)));
+
+  // Shall be 45 degree pitch.
+  const cv::Mat m3(trio::matrixRotateLookAt({0, 0, 0}, {1, 0, -1}, {0, 0, 1}));
+  expectEqual(cv::Vec3d(0, 45, 0), trio::radToDeg(trio::decomposeEuler(m3)));
+
+  // Shall be -45 degree pitch.
+  const cv::Mat m4(trio::matrixRotateLookAt({0, 0, 0}, {1, 0, 1}, {0, 0, 1}));
+  expectEqual(cv::Vec3d(0, -45, 0), trio::radToDeg(trio::decomposeEuler(m4)));
+
+  // Shall be 45 degree roll.
+  const cv::Mat m5(trio::matrixRotateLookAt({0, 0, 0}, {1, 0, 0}, {0, -1, 1}));
+  expectEqual(cv::Vec3d(0, 0, 45), trio::radToDeg(trio::decomposeEuler(m5)));
+
+  // Shall be -45 degree roll.
+  const cv::Mat m6(trio::matrixRotateLookAt({0, 0, 0}, {1, 0, 0}, {0, 1, 1}));
+  expectEqual(cv::Vec3d(0, 0, -45), trio::radToDeg(trio::decomposeEuler(m6)));
+
+  // A mixed case with both yaw and pitch, each 45 degrees.
+  const cv::Mat m7(trio::matrixRotateLookAt({0, 0, 0},
+					    {1, 1, -std::hypot(1, 1)},
+					    {0, 0, 1}));
+  expectEqual(cv::Vec3d(45, 45, 0), trio::radToDeg(trio::decomposeEuler(m7)));
 }
