@@ -43,6 +43,9 @@ cv::Vec3d decomposeEuler(const cv::Mat& mat);
 // is Z).
 cv::Mat matrixRotateLookAt(const cv::Point3d& eye, const cv::Point3d& at,
 			   const cv::Vec3d& up);
+
+// Create a rotation matrix that reflects the relative rotation from A to B.
+cv::Mat matrixRotateRelative(const cv::Mat& a, const cv::Mat& b);
   
 // Give the rank for the given matrix.
 int matrixRank(const cv::Mat& m);

@@ -54,6 +54,15 @@ cv::Mat matrixRotateLookAt(const cv::Point3d& eye, const cv::Point3d& at,
 	  front[1], side[1], newUp[1],
 	  front[2], side[2], newUp[2]);
 }
+
+cv::Mat matrixRotateRelative(const cv::Mat& a, const cv::Mat& b)
+{
+  assert(a.rows == 3);
+  assert(a.cols == 3);
+  assert(a.size() == b.size());
+
+  return b * a.t();
+}
   
 int matrixRank(const cv::Mat& m)
 {

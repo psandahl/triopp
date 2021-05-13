@@ -8,6 +8,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <iostream>
 
 TEST(MatrixUtilTest, matrixRank)
 {
@@ -107,4 +108,25 @@ TEST(MatrixUtilTest, matrixLookAtAndDecompose)
 					    {1, 1, -std::hypot(1, 1)},
 					    {0, 0, 1}));
   expectEqual(cv::Vec3d(45, 45, 0), trio::radToDeg(trio::decomposeEuler(m7)));
+}
+
+TEST(MatrixUtilTest, matrixRelative)
+{
+  // Relative orientation between equal rotations shall be identity matrix.
+  const cv::Mat m0(trio::matrixRotateYPR(trio::degToRad({123, 88, -15})));
+  const cv::Mat m1(trio::matrixRotateRelative(m0, m0));  
+  expectEqual(cv::Mat::eye(3, 3, CV_64FC1), m1);
+
+  // Relative orientation between different rotations shall be usable
+  // to transfer between those two.
+  const cv::Mat m2(trio::matrixRotateYPR(trio::degToRad({42, 3, 5})));
+  const cv::Mat m3(trio::matrixRotateYPR(trio::degToRad({49,-13, 5})));
+
+  const cv::Mat m4(trio::matrixRotateRelative(m2, m3));
+
+  // m4 * m2 shall yield m3.
+  expectEqual(m3, m4 * m2);
+
+  // m4.t() * m3 shall yield m2.
+  expectEqual(m2, m4.t() * m3);
 }
