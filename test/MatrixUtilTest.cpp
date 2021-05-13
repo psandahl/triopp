@@ -130,3 +130,19 @@ TEST(MatrixUtilTest, matrixRelative)
   // m4.t() * m3 shall yield m2.
   expectEqual(m2, m4.t() * m3);
 }
+
+TEST(MatrixUtilTest, matrixPermute)
+{
+  const cv::Mat worldToCam(trio::matrixWorldToCameraPermute());
+
+  const cv::Mat w0(trio::matrixRotateYPR(trio::degToRad({-17, 139, -11})));
+  const cv::Mat c0(w0 * worldToCam);
+
+  // Check that the axes are the expected.
+  expectEqual(c0.col(0), w0.col(1).mul(-1));
+  expectEqual(c0.col(1), w0.col(2).mul(-1));
+  expectEqual(c0.col(2), w0.col(0));
+
+  // And check that we can go back to world frame.
+  expectEqual(w0, c0 * worldToCam.t());
+}

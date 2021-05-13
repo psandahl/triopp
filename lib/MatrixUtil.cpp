@@ -63,6 +63,14 @@ cv::Mat matrixRotateRelative(const cv::Mat& a, const cv::Mat& b)
 
   return b * a.t();
 }
+
+cv::Mat matrixWorldToCameraPermute()
+{
+  return (cv::Mat_<double>(3, 3) <<
+	   0,  0, 1,
+	  -1,  0, 0,
+	   0, -1, 0);
+}
   
 int matrixRank(const cv::Mat& m)
 {

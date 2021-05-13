@@ -46,6 +46,11 @@ cv::Mat matrixRotateLookAt(const cv::Point3d& eye, const cv::Point3d& at,
 
 // Create a rotation matrix that reflects the relative rotation from A to B.
 cv::Mat matrixRotateRelative(const cv::Mat& a, const cv::Mat& b);
+
+// Create a permutation matrix where axes are transformed from world
+// coordinate frame to camera coordinate frame. To permute columns of
+// a matrix it must be multiplied to the right of the matrix.
+cv::Mat matrixWorldToCameraPermute();
   
 // Give the rank for the given matrix.
 int matrixRank(const cv::Mat& m);
