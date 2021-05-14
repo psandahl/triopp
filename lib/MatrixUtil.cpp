@@ -1,4 +1,5 @@
 #include "MatrixUtil.hpp"
+#include "MathUtil.hpp"
 
 #include <cassert>
 #include <cmath>
@@ -70,6 +71,19 @@ cv::Mat matrixWorldToCameraPermute()
 	   0,  0, 1,
 	  -1,  0, 0,
 	   0, -1, 0);
+}
+
+cv::Mat matrixIntrinsic(const cv::Vec2d& fieldOfView, const cv::Rect2d& rect)
+{
+  const double fx = focalLength(fieldOfView[0], rect.width);
+  const double fy = focalLength(fieldOfView[1], rect.height);
+  const double cx = rect.x + rect.width / 2.0;
+  const double cy = rect.y + rect.height / 2.0;
+
+  return (cv::Mat_<double>(3, 3) <<
+	  fx, 0, cx,
+	  0, fy, cy,
+	  0,  0,  1);
 }
   
 int matrixRank(const cv::Mat& m)

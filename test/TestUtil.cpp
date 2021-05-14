@@ -2,11 +2,17 @@
 
 #include <gtest/gtest.h>
 
+void expectEqual(const cv::Vec2d& exp, const cv::Vec2d& act)
+{
+  EXPECT_NEAR(exp[0], act[0], 0.000000000001);
+  EXPECT_NEAR(exp[1], act[1], 0.000000000001);
+}
+
 void expectEqual(const cv::Vec3d& exp, const cv::Vec3d& act)
 {
-  EXPECT_DOUBLE_EQ(exp[0], act[0]);
-  EXPECT_DOUBLE_EQ(exp[1], act[1]);
-  EXPECT_DOUBLE_EQ(exp[2], act[2]);
+  EXPECT_NEAR(exp[0], act[0], 0.000000000001);
+  EXPECT_NEAR(exp[1], act[1], 0.000000000001);
+  EXPECT_NEAR(exp[2], act[2], 0.000000000001);
 }
 
 void expectEqual(const cv::Mat& exp, const cv::Mat& act)

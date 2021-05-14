@@ -51,6 +51,12 @@ cv::Mat matrixRotateRelative(const cv::Mat& a, const cv::Mat& b);
 // coordinate frame to camera coordinate frame. To permute columns of
 // a matrix it must be multiplied to the right of the matrix.
 cv::Mat matrixWorldToCameraPermute();
+
+// Create a 3x3 matrix carrying camera intrinsics. The width and
+// height for the rect is inclusive. If using a e.g. unit size rect
+// that is what to expect, but if the rect is representing pixels in
+// an actual image the image's dimensions shall be reduced by - 1.
+cv::Mat matrixIntrinsic(const cv::Vec2d& fieldOfView, const cv::Rect2d& rect);
   
 // Give the rank for the given matrix.
 int matrixRank(const cv::Mat& m);
