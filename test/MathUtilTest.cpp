@@ -19,3 +19,13 @@ TEST(MathUtilTest, degToRad)
   EXPECT_DOUBLE_EQ(M_PI, trio::degToRad(180.0));
   EXPECT_DOUBLE_EQ(M_PI * 1.5, trio::degToRad(270.0));
 }
+
+TEST(MathUtilTest, focalLength)
+{
+  EXPECT_DOUBLE_EQ(1.0, trio::focalLength(trio::degToRad(90.0), 2.0));
+}
+
+TEST(MathUtilTest, fieldOfView)
+{
+  EXPECT_DOUBLE_EQ(90.0, trio::radToDeg(trio::fieldOfView(1.0, 2.0)));
+}
