@@ -5,8 +5,7 @@
 #include <cmath>
 #include <limits>
 
-namespace trio
-{
+namespace trio {
 
 cv::Mat matrixRotateYPR(double y, double p, double r)
 {

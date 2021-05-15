@@ -9,6 +9,7 @@ enable_testing()
 
 add_executable(
   trio-test
+  CameraTest.cpp
   MathUtilTest.cpp
   MatrixUtilTest.cpp
   TestUtil.cpp

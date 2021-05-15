@@ -166,17 +166,17 @@ TEST(MatrixUtilTest, matrixIntrinsic)
   const cv::Vec3d mid(0, 0, 1);
 
   // Shall hit mid pixel.
-  expectEqual(cv::Vec2d(0.0, 0.0),
+  expectEqual(cv::Point2d(0.0, 0.0),
 	      trio::toEuclidean2d(K0 * trio::toColumn(mid)));
-  expectEqual(cv::Vec2d(w / 2.0, h / 2.0),
+  expectEqual(cv::Point2d(w / 2.0, h / 2.0),
 	      trio::toEuclidean2d(K1 * trio::toColumn(mid)));
 
   // The mid pixel shall project back to ray.
   expectEqual(mid,
-    trio::toEuclidean3d(K0i * trio::toHomogeneous(cv::Point2d(0, 0), 1)));
+    trio::toVec3d(K0i * trio::toHomogeneous(cv::Point2d(0, 0))));
   expectEqual(mid,
-    trio::toEuclidean3d(K1i *
-      trio::toHomogeneous(cv::Point2d(w / 2.0, h / 2.0), 1)));
+    trio::toVec3d(K1i *
+      trio::toHomogeneous(cv::Point2d(w / 2.0, h / 2.0))));
 
   // Some additional cases.
   const double minX = -std::tan(fovH / 2.0);
@@ -188,52 +188,52 @@ TEST(MatrixUtilTest, matrixIntrinsic)
   const cv::Vec3d ul(cv::normalize(cv::Vec3d(minX, minY, 1.0)));
 
   // Shall hit ul pixel.
-  expectEqual(cv::Vec2d(-0.5, -0.5),
+  expectEqual(cv::Point2d(-0.5, -0.5),
 	      trio::toEuclidean2d(K0 * trio::toColumn(ul)));
-  expectEqual(cv::Vec2d(0.0, 0.0),
+  expectEqual(cv::Point2d(0.0, 0.0),
 	      trio::toEuclidean2d(K1 * trio::toColumn(ul)));
 
   // The ul pixel shall project back to ray.
   expectEqual(ul,
-    cv::normalize(trio::toEuclidean3d(K0i *
-      trio::toHomogeneous(cv::Point2d(-0.5, -0.5), 1))));
+    cv::normalize(trio::toVec3d(K0i *
+      trio::toHomogeneous(cv::Point2d(-0.5, -0.5)))));
   expectEqual(ul,
-    cv::normalize(trio::toEuclidean3d(K1i *
-      trio::toHomogeneous(cv::Point2d(0.0, 0.0), 1))));
+    cv::normalize(trio::toVec3d(K1i *
+      trio::toHomogeneous(cv::Point2d(0.0, 0.0)))));
 
   // Upper right.
   const cv::Vec3d ur(cv::normalize(cv::Vec3d(maxX, minY, 1.0)));
 
   // Shall hit ur pixel.
-  expectEqual(cv::Vec2d(0.5, -0.5),
+  expectEqual(cv::Point2d(0.5, -0.5),
 	      trio::toEuclidean2d(K0 * trio::toColumn(ur)));
-  expectEqual(cv::Vec2d(w, 0.0),
+  expectEqual(cv::Point2d(w, 0.0),
 	      trio::toEuclidean2d(K1 * trio::toColumn(ur)));
 
   // The ur pixel shall project back to ray.
   expectEqual(ur,
-    cv::normalize(trio::toEuclidean3d(K0i *
-      trio::toHomogeneous(cv::Point2d(0.5, -0.5), 1))));
+    cv::normalize(trio::toVec3d(K0i *
+      trio::toHomogeneous(cv::Point2d(0.5, -0.5)))));
   expectEqual(ur,
-    cv::normalize(trio::toEuclidean3d(K1i *
-      trio::toHomogeneous(cv::Point2d(w, 0.0), 1))));
+    cv::normalize(trio::toVec3d(K1i *
+      trio::toHomogeneous(cv::Point2d(w, 0.0)))));
 
   // Lower right.
   const cv::Vec3d lr(cv::normalize(cv::Vec3d(maxX, maxY, 1.0)));
 
   // Shall hit lr pixel.
-  expectEqual(cv::Vec2d(0.5, 0.5),
+  expectEqual(cv::Point2d(0.5, 0.5),
 	      trio::toEuclidean2d(K0 * trio::toColumn(lr)));
-  expectEqual(cv::Vec2d(w, h),
+  expectEqual(cv::Point2d(w, h),
 	      trio::toEuclidean2d(K1 * trio::toColumn(lr)));
 
   // The lr pixel shall project back to ray.
   expectEqual(lr,
-    cv::normalize(trio::toEuclidean3d(K0i *
-      trio::toHomogeneous(cv::Point2d(0.5, 0.5), 1))));
+    cv::normalize(trio::toVec3d(K0i *
+      trio::toHomogeneous(cv::Point2d(0.5, 0.5)))));
   expectEqual(lr,
-    cv::normalize(trio::toEuclidean3d(K1i *
-      trio::toHomogeneous(cv::Point2d(w, h), 1))));
+    cv::normalize(trio::toVec3d(K1i *
+      trio::toHomogeneous(cv::Point2d(w, h)))));
 
   // The ll case should be redundant :-)
 }

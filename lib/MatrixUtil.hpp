@@ -2,8 +2,7 @@
 
 #include <opencv2/core.hpp>
 
-namespace trio
-{
+namespace trio {
 
 // The world coordinate system for trio is a right handed system like
 // the following.
