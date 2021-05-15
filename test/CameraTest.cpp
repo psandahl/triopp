@@ -51,3 +51,17 @@ TEST(CameraTest, otherPositionsInCameraSpace)
    expectEqual(cv::Point3d(2, 0, 1), c1.cameraSpace(cv::Point3d(0, 1, 0)));
    expectEqual(cv::Point3d(2, -1, 2), c1.cameraSpace(cv::Point3d(0, 0, 1)));
 }
+
+TEST(CameraTest, simpleProjection)
+{
+  // Camera with unit size sensor.
+  const trio::Camera c0(cv::Point3d(0, 0, 0),
+			trio::degToRad(cv::Vec3d(0, 0, 0)),
+			trio::degToRad(cv::Vec2d(90, 90)));
+
+  expectEqual(cv::Point2d(0, 0), c0.project(cv::Point3d(1, 0, 0)));
+  expectEqual(cv::Point2d(-0.5, -0.5), c0.project(cv::Point3d(1, 1, 1)));
+  expectEqual(cv::Point2d(0.5, -0.5), c0.project(cv::Point3d(1, -1, 1)));
+  expectEqual(cv::Point2d(-0.5, 0.5), c0.project(cv::Point3d(1, 1, -1)));
+  expectEqual(cv::Point2d(0.5, 0.5), c0.project(cv::Point3d(1, -1, -1)));
+}

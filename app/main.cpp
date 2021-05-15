@@ -7,8 +7,6 @@
 
 int main()
 {
-  cv::Mat m0(trio::matrixRotateLookAt({0, 0, 0}, {0, 1, 0}, {0, 0, 1}));
-
-  std::cout << "m0:\n" << m0 << std::endl;
+  std::cout << ">\n" << trio::matrixRotateYPR(trio::degToRad(cv::Vec3d(90, -90, 180))) << std::endl;
   return 0;
 }

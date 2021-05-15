@@ -26,6 +26,9 @@ public:
 
   // Get a world coordinate mapped to the camera coordinate frame.
   cv::Point3d cameraSpace(const cv::Point3d& point) const;
+
+  // Project a world coordinate.
+  cv::Point2d project(const cv::Point3d& point) const;
   
 private:
   // 3x4 world to camera matrix.

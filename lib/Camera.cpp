@@ -2,6 +2,8 @@
 #include "MathUtil.hpp"
 #include "MatrixUtil.hpp"
 
+#include <iostream>
+
 namespace {
 
 cv::Mat matrixCamera(const cv::Point3d& position,
@@ -44,6 +46,21 @@ cv::Point3d Camera::position() const
 cv::Point3d Camera::cameraSpace(const cv::Point3d& point) const
 {
   return toEuclidean3d(_permuteT * _worldToCamera * toHomogeneous(point));
+}
+
+cv::Point2d Camera::project(const cv::Point3d& point) const
+{
+  const cv::Mat c(_permuteT * _worldToCamera * toHomogeneous(point));
+
+  const double x = c.at<double>(0, 0);
+  const double y = c.at<double>(1, 0);
+  const double r = std::hypot(x, y);
+  const double r2 = r * r;
+  const double r3 = r2 * r;
+  const double r4 = r2 * r2;
+  const double scale = 1.0 + (r2 * _k2 + r3 * _k3 + r4 * _k4);
+
+  return toEuclidean2d(_intrinsic * c.mul(scale));
 }
   
 }
