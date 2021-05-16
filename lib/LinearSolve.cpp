@@ -53,6 +53,7 @@ bool solveDLT(const std::vector<std::pair<cv::Point2d, cv::Point3d>>& points,
   }
 
   cv::Mat h(vt.row(vt.rows - 1));
+  
   if (h.at<double>(0, 11) < 0.0) h = h.mul(-1);
 
   const double norm = std::sqrt(h.at<double>(0, 8) * h.at<double>(0, 8) +
@@ -60,45 +61,6 @@ bool solveDLT(const std::vector<std::pair<cv::Point2d, cv::Point3d>>& points,
 				h.at<double>(0, 10) * h.at<double>(0, 10));
   h = h / norm;
   projection = h.reshape(0, 3);
-
-#if 0
-  std::cout << "h:\n" << h << std::endl;
-
-  /*
-  for (int i = 0; i < int(points.size()); ++i) {
-    std::cout << "Expect: " << points[i].first << std::endl;
-
-    const cv::Point2d p(toEuclidean2d(h * toHomogeneous(points[i].second)));
-    std::cout << "Got: " << p << std::endl;
-  }
-
-  cv::Mat c, r, t;
-  cv::decomposeProjectionMatrix(h, c, r, t);
-
-  std::cout << "c:\n" << c << std::endl;
-  std::cout << "r:\n" << r << std::endl;
-  std::cout << "t:\n" << t << std::endl;*/
-
-  cv::Mat m33(h.colRange(0, 3));
-  cv::Mat t(h.col(3));
-
-  cv::Mat i, r;
-  cv::RQDecomp3x3(m33, i, r);
-
-  cv::Mat p(matrixWorldToCameraPermute());
-
-  std::cout << "i:\n" << i << std::endl;
-  std::cout << "r:\n" << (p * r) << std::endl;
-  std::cout << "t:\n" << (p * t) << std::endl;
-
-  cv::Mat rr = p * r;
-  cv::Mat tt = p * t;
-  
-
-  std::cout << "tr:\n" << (rr.t() * tt.mul(-1)) << std::endl;
-
-  std::cout << "e: " << radToDeg(decomposeEuler(rr.t())) << std::endl;
-#endif
   
   return true;
 }
