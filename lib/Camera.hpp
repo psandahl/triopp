@@ -29,6 +29,11 @@ public:
 
   // Project a world coordinate.
   cv::Point2d project(const cv::Point3d& point) const;
+
+  // Get the camera's intrinsic matrix.
+  const cv::Mat& intrinsic() const { return _intrinsic; }
+  
+  const cv::Mat& wtc() const { return _worldToCamera; }
   
 private:
   // 3x4 world to camera matrix.
