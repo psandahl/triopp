@@ -37,6 +37,9 @@ cv::Mat matrixRotateYPR(const cv::Vec3d& ypr);
 // Decompose a world matrix into Euler angles yaw, pitch and roll.
 cv::Vec3d decomposeEuler(const cv::Mat& mat);
 
+// Decompose a 3x3 matrix into R (upper triangle) and Q (orthogonal).
+void decomposeRQ3x3(const cv::Mat& m, cv::Mat& R, cv::Mat& Q);
+  
 // Create a world rotation matrix from an eye origin, direction where
 // to look (which is along the X axis) and an initial up axis (which
 // is Z).

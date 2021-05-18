@@ -38,7 +38,7 @@ void expectEqual(const cv::Mat& exp, const cv::Mat& act)
     for (int j = 0; j < exp.rows; ++j) {
       EXPECT_NEAR(exp.at<double>(j, i),
 		  act.at<double>(j, i),
-		  0.000000000001);
+		  0.00000001);
     }
   }
 }

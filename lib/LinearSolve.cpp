@@ -81,6 +81,10 @@ void decomposeDLTMatrix(const cv::Mat& projection, cv::Point3d& position,
   cv::Mat i, r;
   cv::RQDecomp3x3(m33, i, r);
 
+  //std::cout << "A:\n" << m33 << std::endl;
+  //std::cout << "R:\n" << i << std::endl;
+  std::cout << "Q:\n" << r << std::endl;
+
   // Permute stuff to order the rows.
   cv::Mat permute(matrixWorldToCameraPermute());
 

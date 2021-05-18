@@ -42,6 +42,66 @@ cv::Vec3d decomposeEuler(const cv::Mat& mat)
   };
 }
 
+void decomposeRQ3x3(const cv::Mat& m, cv::Mat& R, cv::Mat& Q)
+{
+  assert(m.rows == 3);
+  assert(m.cols == 3);
+  assert(m.depth() == CV_64F);
+
+  // A will be used as a temporary matrix.
+  cv::Mat A(m.clone());
+
+  double s, c, z;
+
+  // Givens rotations for x axis.
+  s = A.at<double>(2, 1); // Element to zero.
+  c = A.at<double>(2, 2);
+  z = 1.0 / std::sqrt(s * s + c * c + DBL_EPSILON);
+  s *= z;
+  c *= z;
+
+  const cv::Mat Gx = (cv::Mat_<double>(3, 3) <<
+		      1,  0, 0,
+		      0,  c, s,
+		      0, -s, c);
+  R = A * Gx;
+  assert(std::fabs(R.at<double>(2, 1)) < FLT_EPSILON);
+  R.at<double>(2, 1) = 0.0;
+
+  // Givens rotations for y axis.
+  s = -R.at<double>(2, 0); // Element to zero.
+  c = R.at<double>(2, 2);
+  z = 1.0 / std::sqrt(s * s + c * c + DBL_EPSILON);
+  s *= z;
+  c *= z;
+
+  const cv::Mat Gy = (cv::Mat_<double>(3, 3) <<
+		      c, 0, -s,
+		      0, 1,  0,
+		      s, 0,  c);
+  A = R * Gy;
+  assert(std::fabs(A.at<double>(2, 0)) < FLT_EPSILON);
+  A.at<double>(2, 0) = 0.0;
+
+  // Givens rotations for z axis.
+  s = A.at<double>(1, 0); // Element to zero.
+  c = A.at<double>(1, 1);
+  z = 1.0 / std::sqrt(s * s + c * c + DBL_EPSILON);
+  s *= z;
+  c *= z;
+
+  const cv::Mat Gz = (cv::Mat_<double>(3, 3) <<
+		       c, s, 0,
+		      -s, c, 0,
+		       0, 0, 1);
+  R = A * Gz;
+  assert(std::fabs(R.at<double>(1, 0)) < FLT_EPSILON);
+  R.at<double>(1, 0) = 0.0;
+
+  // Q become the product of Givens rotations.
+  Q = Gz.t() * Gy.t() * Gx.t();
+}
+
 cv::Mat matrixRotateLookAt(const cv::Point3d& eye, const cv::Point3d& at,
 			   const cv::Vec3d& up)
 {

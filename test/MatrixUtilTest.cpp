@@ -237,3 +237,43 @@ TEST(MatrixUtilTest, matrixIntrinsic)
 
   // The ll case should be redundant :-)
 }
+
+TEST(MatrixUtil, decpomposeRQ)
+{
+  // Simplest case. Identity matrix shall decompose to identity
+  // matrix.
+  cv::Mat M = cv::Mat::eye(3, 3, CV_64FC1);
+  cv::Mat R, Q;
+
+  trio::decomposeRQ3x3(M, R, Q);
+
+  expectEqual(M, Q); // M == I
+  expectEqual(M, R);
+
+  // Some random stuff.
+  M = (cv::Mat_<double>(3, 3) <<
+       -.9, 112.5, 89,
+       -113, 98.88, 17765.1,
+       -14.35, 1, -17);
+
+  trio::decomposeRQ3x3(M, R, Q);
+
+  // M == RQ.
+  expectEqual(M, R * Q);
+
+  // Make up some instrinsic and rotation.
+  const cv::Mat In = (cv::Mat_<double>(3, 3) <<
+		      1.2, 0, 0,
+		      0, 1.3, 0,
+		      0, 0, 1);
+
+  const cv::Mat Ro = trio::matrixRotateYPR(-0.43, 2.097, 0.7);
+
+  M = In * Ro;
+
+  trio::decomposeRQ3x3(M, R, Q);
+
+  expectEqual(R, In);
+  expectEqual(Q, Ro);
+  expectEqual(M, R * Q);
+}
