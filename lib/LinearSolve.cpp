@@ -3,8 +3,6 @@
 #include "MathUtil.hpp"
 #include "MatrixUtil.hpp"
 
-#include <opencv2/calib3d.hpp>
-
 #include <cassert>
 #include <cmath>
 #include <iostream>
@@ -78,17 +76,13 @@ void decomposeDLTMatrix(const cv::Mat& projection, cv::Point3d& position,
 
   // RQ decompose the 3x3 matrix into an intrinsics matrix and one
   // rotation matrix.
-  cv::Mat i, r;
-  cv::RQDecomp3x3(m33, i, r);
-
-  //std::cout << "A:\n" << m33 << std::endl;
-  //std::cout << "R:\n" << i << std::endl;
-  std::cout << "Q:\n" << r << std::endl;
+  cv::Mat R, Q;
+  decomposeRQ3x3(m33, R, Q);
 
   // Permute stuff to order the rows.
   cv::Mat permute(matrixWorldToCameraPermute());
 
-  r = permute * r;
+  cv::Mat r = permute * Q;
   cv::Mat t = permute * m31;
 
   // Invert the rotation to extract euler and translation.
@@ -97,8 +91,8 @@ void decomposeDLTMatrix(const cv::Mat& projection, cv::Point3d& position,
 
   position = toEuclidean3d(t);
   orientation = decomposeEuler(r);
-  focalLength[0] = i.at<double>(0, 0);
-  focalLength[1] = i.at<double>(1, 1);
+  focalLength[0] = R.at<double>(0, 0);
+  focalLength[1] = R.at<double>(1, 1);
 }
   
 }
